@@ -39,7 +39,9 @@ void setup()
   display.setup();
   Wire.begin();
   Serial.begin(9600);
-  while (!Serial.isConnected()) {}
+  while (!Serial.isConnected())
+  {
+  }
   display.clearDisplay();
   display.display();
   proximitySensor.begin();
@@ -89,45 +91,47 @@ void loop()
   {
     aPushSent = !aPushSent;
   }
-  if (aPushSent)
+
+  if (aPushSent && !bPushSent)
   {
-    if (bPushSent) {}
-    else {
-      display.clearDisplay();
-      display.setCursor(0, 0);
-    }
+    display.clearDisplay();
+    display.setCursor(0, 0);
     display.println("Proximity: " + String(proximityValue));
   }
+
   if (display.pressedB())
   {
     bPushSent = !bPushSent;
   }
-  if (bPushSent)
+
+  if (bPushSent && !aPushSent)
   {
-    if (aPushSent) {}
-    else {
-      display.clearDisplay();
-      display.setCursor(0, 0);
-    }
+    display.clearDisplay();
+    display.setCursor(0, 0);
     display.println("Light: " + String(lightValue));
   }
+
   if (display.pressedC())
   {
     cPushSent = !cPushSent;
   }
+
   if (cPushSent)
   {
     display.clearDisplay();
-    if (aPushSent) {
+    if (aPushSent)
+    {
       Blynk.virtualWrite(V3, proximityValue);
       Blynk.virtualWrite(V5, 1);
     }
-    if (bPushSent) {
+    if (bPushSent)
+    {
       Blynk.virtualWrite(V2, lightValue);
       Blynk.virtualWrite(V4, 1);
     }
-  } 
-  if (!cPushSent) {
+  }
+  else
+  {
     Blynk.virtualWrite(V5, 0);
     Blynk.virtualWrite(V4, 0);
     Blynk.virtualWrite(V3, 0);
@@ -169,16 +173,19 @@ void proximityChangeLEDs()
   }
 }
 
-void betterDisplaySetup() {
+void betterDisplaySetup()
+{
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0, 0);
   display.display();
 }
 
-void betterDelay(int time) { // makes delay run the 2 important functions every 100 milliseconds
-  int timePerSegment = 100; 
-  for (int passedTime = 0; passedTime < time + 1; passedTime += timePerSegment) {
+void betterDelay(int time)
+{ // makes delay run the 2 important functions every 100 milliseconds
+  int timePerSegment = 100;
+  for (int passedTime = 0; passedTime < time + 1; passedTime += timePerSegment)
+  {
     display.loop();
     Blynk.run();
     delay(timePerSegment);
