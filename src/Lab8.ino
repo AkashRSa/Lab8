@@ -79,31 +79,32 @@ void loop()
   {
     aPushSent = !aPushSent;
   }
-
-  if (aPushSent && !bPushSent)
+  if (aPushSent)
   {
-    display.clearDisplay();
-    display.setCursor(0, 0);
+    if (!bPushSent)
+    {
+      display.clearDisplay();
+      display.setCursor(0, 0);
+    }
     display.println("Proximity: " + String(proximityValue));
   }
-
   if (display.pressedB())
   {
     bPushSent = !bPushSent;
   }
-
-  if (bPushSent && !aPushSent)
+  if (bPushSent)
   {
-    display.clearDisplay();
-    display.setCursor(0, 0);
+    if (!aPushSent)
+    {
+      display.clearDisplay();
+      display.setCursor(0, 0);
+    }
     display.println("Light: " + String(lightValue));
   }
-
   if (display.pressedC())
   {
     cPushSent = !cPushSent;
   }
-
   if (cPushSent)
   {
     display.clearDisplay();
@@ -118,7 +119,7 @@ void loop()
       Blynk.virtualWrite(V4, 1);
     }
   }
-  else
+  if (!cPushSent)
   {
     Blynk.virtualWrite(V5, 0);
     Blynk.virtualWrite(V4, 0);
